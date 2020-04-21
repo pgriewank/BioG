@@ -455,6 +455,7 @@ def plot_scatter_time(N,t,
     color  = ['k','b','orange','r','g'],
     buffer = [0.9,0.85,0.8,0.75,0.7],
     alpha  = [0.5,0.5,0.5,0.5,0.5],
+    labels = ['','','','',''],
     figsize = (6,6),
     time_tracking=False,
     t_substeps=10,
@@ -486,10 +487,10 @@ def plot_scatter_time(N,t,
         #Just add with l*1000! Philipp you are so smart
         #checking if the 
         if time_tracking:
-            xs, ys = func_scatter_grid_time( np.sum(N[:,:,l,t,:],axis=2),t=t+l*1000+l,t_substeps=t_substeps)
+            xs, ys = func_scatter_grid_time( np.sum(N[:,:,l,t,:],axis=2),t=t+l*1000+l,t_substeps=t_substeps,buffer=buffer[l])
         else:
-            xs, ys = func_scatter_grid( np.sum(N[:,:,l,t,:],axis=2))
-        axes.scatter(dx*xs, dy*ys, s=sizes[l],c=color[l],alpha=alpha[l])
+            xs, ys = func_scatter_grid( np.sum(N[:,:,l,t,:],axis=2),buffer=buffer[l])
+        axes.scatter(dx*xs, dy*ys, s=sizes[l],c=color[l],alpha=alpha[l],label=labels[l])
     
     plt.title("N at t=%s" % (t) )
     plt.xlabel("%s  [%s]" % ("x","m"))
