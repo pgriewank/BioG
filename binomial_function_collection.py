@@ -290,7 +290,8 @@ def func_scatter_grid(N_2D,buffer=0.1):
     return x_rand_grid,y_rand_grid    
 
 
-def func_advection_numerics_plot(N1,N2,N3,label1='dt: 12 min',label2='dt: 6 min',label3='dt: 3 min'):
+#def func_advection_numerics_plot(N1,N2,N3,label1=r'$\Delta t$: 12 min',label2=r'$\Delta t$: 6 min',label3=r'$\Delta t$: 3 min'):
+def func_advection_numerics_plot(N1,N2,N3,label1='$\Delta t$: 12 min',label2='$\Delta t$: 6 min',label3='$\Delta t$: 3 min'):
     """
     Plots the final timestep and the time evolution of the mean profile of 3 experiments. 
     
@@ -382,9 +383,9 @@ def func_advection_numerics_plot(N1,N2,N3,label1='dt: 12 min',label2='dt: 6 min'
     axes[1].grid(True,color='k',lw=1,alpha=0.5)
     axes[2].grid(True,color='k',lw=1,alpha=0.5)
 
-    axes[0].set_xlabel('x km')
-    axes[1].set_xlabel('x km')
-    axes[2].set_xlabel('x km')
+    axes[0].set_xlabel('x [km]')
+    axes[1].set_xlabel('x [km]')
+    axes[2].set_xlabel('x [km]')
     axes[0].set_title(label1)
     axes[1].set_title(label2)
     axes[2].set_title(label3)
@@ -393,7 +394,7 @@ def func_advection_numerics_plot(N1,N2,N3,label1='dt: 12 min',label2='dt: 6 min'
     plt.xlim(0,n_x)
     plt.ylim(0,n_y)
     
-    axes[0].set_ylabel('y km')
+    axes[0].set_ylabel('y [km]')
     return fig
 
 
@@ -459,7 +460,8 @@ def plot_scatter_time(N,t,
     figsize = (6,6),
     time_tracking=False,
     t_substeps=10,
-    dx=1,dy=1):
+    dx=1,dy=1,
+    rotation = 0 ):
     """
     A simple single snapshot scatter plot with random displacement
     
@@ -492,10 +494,10 @@ def plot_scatter_time(N,t,
             xs, ys = func_scatter_grid( np.sum(N[:,:,l,t,:],axis=2),buffer=buffer[l])
         axes.scatter(dx*xs, dy*ys, s=sizes[l],c=color[l],alpha=alpha[l],label=labels[l])
     
-    plt.title("N at t=%s" % (t) )
+    plt.title("timestep: %s" % (t) )
     plt.xlabel("%s  [%s]" % ("x","m"))
     plt.ylabel("%s  [%s]" % ("y","m"))
-    
+    plt.xticks(rotation=rotation)
     
     return fig
 
@@ -512,7 +514,8 @@ def plot_scatter_movie(N,t0,t1,output_folder='mov/',base_str='N_movie_',name='',
     figsize       = (6,6),
     time_tracking = True,
     t_substeps    = 10,
-    dx=1,dy=1):
+    dx=1,dy=1,
+    rotation=0):
     """
     A wrapper for plot_scatter_time that loops from t0 to t1 plotting the scatter plots for each and saving them.
     
@@ -529,7 +532,8 @@ def plot_scatter_movie(N,t0,t1,output_folder='mov/',base_str='N_movie_',name='',
         figsize       = figsize   ,
         time_tracking = time_tracking,
         t_substeps    = t_substeps,
-        dx = dx, dy =dy)
+        dx = dx, dy =dy,
+        rotation = rotation)
         
         ext = ".png"
         savestring =base_str+name+'_dt'+str(t)+ext
@@ -615,7 +619,7 @@ def func_advection_binomial_2D(N_sub_2D_t0,v_x_rel,v_y_rel,periodic_flag = True)
     A_xy = v_y_rel_frac*v_x_rel_frac
     A = 1
     p_x  = A_x/A
-    p_y  = A_y/(A-A_y)
+    p_y  = A_y/(A-A_x)
     p_xy = A_xy/(A-A_x-A_y)
     
     #Now do and x, y, and xy separately, and loop over all N_sub
